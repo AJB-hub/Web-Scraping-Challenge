@@ -25,7 +25,7 @@ def connect(url:str) -> str:
     return cout
 
 
-def scrape() -> list:
+def scrape() -> dict:
     
     scrapeList = []
     
@@ -35,31 +35,51 @@ def scrape() -> list:
     url = 'https://redplanetscience.com/'
     soup = connect(url)
 
-    d = {'news_title': soup.find_all('div', class_ = 'content_title')[0].text,
-         'news_p': soup.find_all('div', class_ = 'article_teaser_body')[0].text
-    }
-    scrapeList.append(d)
+    try:    
+
+        value = {
+                'news_title': soup.find_all('div', class_ = 'content_title')[0].text,
+                    'news_p': soup.find_all('div', class_ = 'article_teaser_body')[0].text
+        }
+
+    except:
+
+        value = 404
+
+    scrapeList.append(value)
     
     #Second Link ---------------------------------------------------------------------------------
     
     url = 'https://spaceimages-mars.com/'
     soup = connect(url)
 
-    featured_url = soup.find_all('img', class_ = 'headerimage fade-in')[0]['src']
+    try:
+
+        featured_url = soup.find_all('img', class_ = 'headerimage fade-in')[0]['src']
     
-    d = {'image_url': url + featured_url}
-    
-    scrapeList.append(d)
+        value = {'image_url': url + featured_url}
+
+    except:
+
+        value = 404
+
+    scrapeList.append(value)
     
     #Third Link ---------------------------------------------------------------------------------
     
     url = 'https://galaxyfacts-mars.com/'
 
-    mars_df = pd.read_html(url)[1]
+    try:
+
+        mars_df = pd.read_html(url)[1]
     
-    d = {'mars_table': mars_df.to_html()}
+        value= {'mars_table': mars_df.to_html()}
     
-    scrapeList.append(d)
+    except:
+
+        value = 404
+
+    scrapeList.append(value)
     
     #Fourth Link ---------------------------------------------------------------------------------
     url = 'https://marshemispheres.com/'
@@ -69,6 +89,7 @@ def scrape() -> list:
     #scrape all relative paths
     rel_path_list = soup.find_all('a', class_ = 'itemLink product-item')
     html_path = [path['href'] for path in rel_path_list]
+
 
     #remove duplicates
     html_path = list(set(html_path))
@@ -100,9 +121,9 @@ def scrape() -> list:
         image_dict['img_url'] = img_url 
         image_path.append(image_dict)       
 
-    d = {'hemi_info': image_path}
+    value = image_path
     
-    scrapeList.append(d)
+    scrapeList.append(value)
     
     return scrapeList
     

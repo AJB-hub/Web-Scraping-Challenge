@@ -6,6 +6,7 @@ import pandas as pd
 import typing
 
 
+
 #Connection Function
 def connect(url:str) -> str:
     # Setup splinter
@@ -25,9 +26,9 @@ def connect(url:str) -> str:
     return cout
 
 
-def scrape() -> list:
+def scrape() -> dict:
     
-    scrapeList = []
+    scrapeDict = {}
     
     
     #First Link ---------------------------------------------------------------------------------
